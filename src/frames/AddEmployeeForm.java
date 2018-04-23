@@ -625,6 +625,9 @@ public class AddEmployeeForm extends javax.swing.JPanel {
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
 
+        clearEmpDetailForm();
+    }//GEN-LAST:event_btnResetActionPerformed
+    private void clearEmpDetailForm() {
         txtEmpId.setText("");
         txtFullName.setText("");
         txtUaeId.setText("");
@@ -649,7 +652,7 @@ public class AddEmployeeForm extends javax.swing.JPanel {
         txtRemark.setText("");
         txtDesignation.setText("");
 
-    }//GEN-LAST:event_btnResetActionPerformed
+    }
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         Employee emp = getEmpData();
