@@ -26,7 +26,8 @@ import org.jdatepicker.impl.UtilDateModel;
  * @author ttay2
  */
 public class EmployeeDetailForm extends javax.swing.JPanel {
-
+    
+    Employee displayedEmp = new Employee();
     JDatePickerImpl dpDoB = null;
     JDatePickerImpl dpVisa = null;
     JDatePickerImpl dpJD = null;
@@ -39,17 +40,17 @@ public class EmployeeDetailForm extends javax.swing.JPanel {
         initComponents();
         initDP();
     }
-
+    
     private void initDP() {
         JFormattedTextField.AbstractFormatter af = new JFormattedTextField.AbstractFormatter() {
             private String datePattern = "dd-MMM-yyyy";
             private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
+            
             @Override
             public Object stringToValue(String string) throws ParseException {
                 return dateFormatter.parseObject(string);
             }
-
+            
             @Override
             public String valueToString(Object o) throws ParseException {
                 if (o != null) {
@@ -59,7 +60,7 @@ public class EmployeeDetailForm extends javax.swing.JPanel {
                 return "";
             }
         };
-
+        
         UtilDateModel model = new UtilDateModel();
         Properties p = new Properties();
         p.put("text.today", "Today");
@@ -75,7 +76,7 @@ public class EmployeeDetailForm extends javax.swing.JPanel {
         dpDoB.setShowYearButtons(false);
         dpDoB.setTextEditable(editable);
         panelDoB.add(dpDoB);
-
+        
         UtilDateModel model2 = new UtilDateModel();
         JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p);
         dpJD = new JDatePickerImpl(datePanel2, af);
@@ -86,7 +87,7 @@ public class EmployeeDetailForm extends javax.swing.JPanel {
         dpJD.setShowYearButtons(false);
         dpJD.setTextEditable(editable);
         panelJoinDate.add(dpJD);
-
+        
         UtilDateModel model3 = new UtilDateModel();
         JDatePanelImpl datePanel3 = new JDatePanelImpl(model3, p);
         dpVisa = new JDatePickerImpl(datePanel3, af);
@@ -98,7 +99,7 @@ public class EmployeeDetailForm extends javax.swing.JPanel {
         dpVisa.setTextEditable(editable);
         panelVisa.add(dpVisa);
     }
-
+    
     private void displayEmpData(Employee emp) {
         txtEmpId.setText(emp.getEmpId() + "");
         txtFullName.setText(emp.getFullName());
@@ -123,6 +124,33 @@ public class EmployeeDetailForm extends javax.swing.JPanel {
         txtMMName.setText(emp.getMMName());
         txtRemark.setText(emp.getRemarks());
         txtDesignation.setText(emp.getDesignation());
+    }
+    
+    private void clearEmpDetailForm() {
+        txtEmpId.setText("");
+        txtFullName.setText("");
+        txtUaeId.setText("");
+        Calendar cal = Calendar.getInstance();
+        Date visaRenew = new Date();
+        cal.setTime(visaRenew);
+        dpVisa.getJFormattedTextField().setText("");
+        txtCell1.setText("");
+        txtCell2.setText("");
+        txtCell3.setText("");
+        txtCardNo.setText("");
+        Date dob = new Date();
+        cal.setTime(dob);
+        dpDoB.getJFormattedTextField().setText("");
+        txtPassportNo.setText("");
+        txtSalary.setText("");
+        txtWPS.setText("");
+        Date jd = new Date();
+        cal.setTime(jd);
+        dpJD.getJFormattedTextField().setText("");
+        txtMMName.setText("");
+        txtRemark.setText("");
+        txtDesignation.setText("");
+        
     }
 
     /**
@@ -206,6 +234,7 @@ public class EmployeeDetailForm extends javax.swing.JPanel {
         jLabel1.setText("Employee ID/Name");
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton2.setVisible(false);
         jButton2.setText("Edit");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -636,10 +665,16 @@ public class EmployeeDetailForm extends javax.swing.JPanel {
             Employee emp = BusinessProcess.getEmpById(Integer.parseInt(searchValue));
             if (emp != null) {
                 displayEmpData(emp);
+                jButton2.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "No Employee found!!!");
+                jButton2.setVisible(false);
+                editable = false;
+                clearEmpDetailForm();
+                changeEditState(true);
             }
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getLocalizedMessage());
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -697,36 +732,41 @@ public class EmployeeDetailForm extends javax.swing.JPanel {
     }//GEN-LAST:event_txtRemarkActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (editable) {
+        changeEditState(editable);
+        editable = !editable;
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+    
+    private void changeEditState(boolean editting) {
+        txtEmpId.setEditable(!editting);
+        txtFullName.setEditable(!editting);
+        txtUaeId.setEditable(!editting);
+        Calendar cal = Calendar.getInstance();
+        Date visaRenew = new Date();
+        cal.setTime(visaRenew);
+        dpVisa.getJFormattedTextField().setEditable(!editting);
+        txtCell1.setEditable(!editting);
+        txtCell2.setEditable(!editting);
+        txtCell3.setEditable(!editting);
+        txtCardNo.setEditable(!editting);
+        Date dob = new Date();
+        cal.setTime(dob);
+        dpDoB.getJFormattedTextField().setEditable(!editting);
+        txtPassportNo.setEditable(!editting);
+        txtSalary.setEditable(!editting);
+        txtWPS.setEditable(!editting);
+        Date jd = new Date();
+        cal.setTime(jd);
+        dpJD.getJFormattedTextField().setEditable(!editting);
+        txtMMName.setEditable(!editting);
+        txtRemark.setEditable(!editting);
+        txtDesignation.setEditable(!editting);
+        if (!editting) {
             jButton2.setText("Save");
         } else {
-            txtEmpId.setEditable(!editable);
-            txtFullName.setEditable(!editable);
-            txtUaeId.setEditable(!editable);
-            Calendar cal = Calendar.getInstance();
-            Date visaRenew = new Date();
-            cal.setTime(visaRenew);
-            dpVisa.getJFormattedTextField().setEditable(!editable);
-            txtCell1.setEditable(!editable);
-            txtCell2.setEditable(!editable);
-            txtCell3.setEditable(!editable);
-            txtCardNo.setEditable(!editable);
-            Date dob = new Date();
-            cal.setTime(dob);
-            dpDoB.getJFormattedTextField().setEditable(!editable);
-            txtPassportNo.setEditable(!editable);
-            txtSalary.setEditable(!editable);
-            txtWPS.setEditable(!editable);
-            Date jd = new Date();
-            cal.setTime(jd);
-            dpJD.getJFormattedTextField().setEditable(!editable);
-            txtMMName.setEditable(!editable);
-            txtRemark.setEditable(!editable);
-            txtDesignation.setEditable(!editable);
+            jButton2.setText("Edit");
         }
-        editable = !editable;
-    }//GEN-LAST:event_jButton2ActionPerformed
-
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
